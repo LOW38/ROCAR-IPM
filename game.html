@@ -122,6 +122,114 @@
             display: inline-block;
             line-height: 34px;
         }
+
+        /* --- Responsive Buttons & UI for Mobile --- */
+        @media (max-width: 700px) {
+            #scoreboard {
+                font-size: 15px;
+                padding: 8px 8px;
+                top: 12px;
+            }
+            #reset_game, #back-menu-btn {
+                width: 40px;
+                height: 40px;
+                font-size: 1.3em;
+                top: 12px;
+                border-width: 1.5px;
+            }
+            #reset_game { right: 12px; }
+            #back-menu-btn { left: 12px; }
+            #daltonismo-toggle {
+                left: 60px;
+                top: 18px;
+                gap: 6px;
+            }
+            .daltonic-icon svg {
+                width: 20px;
+                height: 20px;
+            }
+            .switch {
+                width: 32px;
+                height: 18px;
+            }
+            .slider:before {
+                height: 14px;
+                width: 14px;
+                left: 2px;
+                bottom: 2px;
+            }
+            .switch input:checked + .slider:before {
+                transform: translateX(14px);
+            }
+            .toggle-label {
+                font-size: 0.9em;
+                margin-left: 4px;
+                line-height: 24px;
+            }
+            #win-message {
+                min-width: 180px;
+                padding: 18px 6px;
+                font-size: 0.95em;
+            }
+            #win-message button {
+                font-size: 0.95em;
+                padding: 7px 10px;
+                margin: 8px 4px 0 4px;
+            }
+        }
+        @media (max-width: 500px) {
+            #scoreboard {
+                font-size: 13px;
+                padding: 5px 4px;
+                top: 6px;
+            }
+            #reset_game, #back-menu-btn {
+                width: 32px;
+                height: 32px;
+                font-size: 1em;
+                top: 6px;
+                border-width: 1px;
+            }
+            #reset_game { right: 6px; }
+            #back-menu-btn { left: 6px; }
+            #daltonismo-toggle {
+                left: 44px;
+                top: 8px;
+                gap: 3px;
+            }
+            .daltonic-icon svg {
+                width: 16px;
+                height: 16px;
+            }
+            .switch {
+                width: 22px;
+                height: 12px;
+            }
+            .slider:before {
+                height: 8px;
+                width: 8px;
+                left: 2px;
+                bottom: 2px;
+            }
+            .switch input:checked + .slider:before {
+                transform: translateX(8px);
+            }
+            .toggle-label {
+                font-size: 0.8em;
+                margin-left: 2px;
+                line-height: 16px;
+            }
+            #win-message {
+                min-width: 120px;
+                padding: 10px 2px;
+                font-size: 0.85em;
+            }
+            #win-message button {
+                font-size: 0.85em;
+                padding: 5px 6px;
+                margin: 6px 2px 0 2px;
+            }
+        }
     </style>
 </head>
 <body>
