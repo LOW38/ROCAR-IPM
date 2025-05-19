@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jogo da Memória - Menu Principal</title>
+    <link href="styles.css" type="text/css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #1e293b;
+            --secondary-color: #f43f5e;
+            --accent-color: #fbbf24;
+            --bg-gradient: linear-gradient(135deg, #fbbf24 0%, #f43f5e 100%);
+            --menu-bg: #fff;
+            --menu-border: #e2e8f0;
+            --menu-shadow: 0 8px 40px 0 #1e293b22;
+            --btn-gradient: linear-gradient(90deg, #f43f5e 0%, #fbbf24 100%);
+            --btn-hover: linear-gradient(90deg, #fbbf24 0%, #f43f5e 100%);
+            --btn-text: #1e293b;
+            --btn-text-hover: #fff;
+            --btn-shadow: 0 4px 24px #fbbf2433;
+            --link-color: #1e293b;
+            --link-hover: #f43f5e;
+        }
+        body {
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            background: var(--bg-gradient);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            font-family: 'Montserrat', 'Segoe UI', 'Roboto', Arial, sans-serif;
+        }
+        .menu-container {
+            z-index: 1000;
+            min-width: unset;
+            min-height: unset;
+            width: 350px;
+            padding: 36px 28px 28px 28px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 28px;
+            box-shadow: var(--menu-shadow);
+            border: 2.5px solid var(--menu-border);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            margin-top: 40px;
+            backdrop-filter: blur(12px);
+        }
+        .main-title {
+             z-index: 1000;
+            font-size: 2.7em;
+            font-family: 'Montserrat', 'Segoe UI', 'Comic Sans MS', cursive, sans-serif;
+            color: var(--primary-color);
+            font-weight: 900;
+            letter-spacing: 2px;
+            text-shadow: 0 2px 8px #fbbf2444;
+            margin-bottom: 10px;
+            margin-top: 0;
+            text-align: center;
+            animation: fadeInDown 1s cubic-bezier(.68,-0.55,.27,1.55);
+        }
+        @keyframes fadeInDown {
+            0% { opacity: 0; transform: translateY(-40px);}
+            100% { opacity: 1; transform: translateY(0);}
+        }
+        .menu-btn {
+            z-index: 1000;
+            position: relative;
+            padding: 18px 60px;
+            font-size: 1.35em;
+            font-family: inherit;
+            border: none;
+            border-radius: 16px;
+            cursor: pointer;
+            background: var(--btn-gradient);
+            color: var(--btn-text);
+            font-weight: bold;
+            box-shadow: var(--btn-shadow);
+            letter-spacing: 2px;
+            transition: transform 0.18s, box-shadow 0.18s, background 0.18s, color 0.18s;
+            outline: none;
+            margin-bottom: 18px;
+            margin-top: 10px;
+            border: 2px solid var(--accent-color);
+            animation: fadeInUp 1.1s cubic-bezier(.68,-0.55,.27,1.55);
+        }
+        .menu-btn:hover, .menu-btn:focus {
+            background: var(--btn-hover);
+            color: var(--btn-text-hover);
+            transform: scale(1.07) rotate(-2deg);
+            box-shadow: 0 0 60px 16px #fbbf2444, var(--btn-shadow);
+        }
+        @keyframes fadeInUp {
+            0% { opacity: 0; transform: translateY(40px);}
+            100% { opacity: 1; transform: translateY(0);}
+        }
+        .menu-links {
+             z-index: 1000;
+            margin-top: 10px;
+            display: flex;
+            gap: 32px;
+            z-index: 100;
+            animation: fadeInUp 1.2s cubic-bezier(.68,-0.55,.27,1.55);
+        }
+        .menu-link {
+             z-index: 1000;
+            color: var(--link-color);
+            font-size: 1.1em;
+            text-decoration: none;
+            opacity: 0.9;
+            font-weight: 700;
+            letter-spacing: 1px;
+            transition: color 0.2s, opacity 0.2s, text-shadow 0.2s;
+            text-shadow: 0 2px 8px #fbbf2422;
+            border-bottom: 2px solid transparent;
+            padding-bottom: 2px;
+        }
+        .menu-link:hover, .menu-link:focus {
+            color: var(--link-hover);
+            opacity: 1;
+            border-bottom: 2px solid var(--link-hover);
+            text-shadow: 0 2px 16px #f43f5e44;
+        }
+        /* Decorative cards (unchanged) */
+        .cards-bg {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            width: 1200px;
+            height: 800px;
+            transform: translate(-50%, -50%);
+            z-index: 1;
+            pointer-events: none;
+        }
+        .carta {
+
+            position: absolute;
+            width: 120px;
+            height: 170px;
+            border-radius: 16px;
+            background: #fff;
+            box-shadow: 0 8px 32px 0 rgba(127,83,172,0.17);
+            border: 4px solid var(--primary-color);
+            opacity: 0.92;
+            transform: rotate(var(--angle, 0deg)) scale(var(--scale, 1));
+            top: var(--top, 0);
+            left: var(--left, 0);
+            transition: box-shadow 0.2s, transform 0.2s;
+            animation: spawnCard 0.8s cubic-bezier(.68,-0.55,.27,1.55) forwards, idleCard 3.5s ease-in-out infinite;
+            animation-delay: var(--delay, 0s), var(--idle-delay, 0s);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: none;
+        }
+        .carta::after {
+            content: attr(data-symbol);
+            font-size: 2.7em;
+            color: #fff;
+            text-shadow: 0 2px 12px #0008;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+            width: 100%;
+            opacity: 0.7;
+            pointer-events: none;
+        }
+        @keyframes spawnCard {
+            0% {
+                opacity: 0;
+                transform: scale(0.5) translateY(60px) rotate(var(--angle, 0deg));
+            }
+            80% {
+                opacity: 1;
+                transform: scale(1.08) translateY(-10px) rotate(var(--angle, 0deg));
+            }
+            100% {
+                opacity: 0.92;
+                transform: scale(var(--scale, 1)) translateY(0) rotate(var(--angle, 0deg));
+            }
+        }
+
+        /* Card positions and colors (unchanged) */
+        .carta1 { --angle: -18deg; --scale: 1.1; top: 30px; left: 40px;}
+        .carta2 { --angle: 8deg; --scale: 1.05; top: 80px; left: 220px;}
+        .carta3 { --angle: 22deg; --scale: 1; top: 120px; left: 400px;}
+        .carta4 { --angle: -10deg; --scale: 0.95; top: 200px; left: 120px;}
+        .carta5 { --angle: 12deg; --scale: 0.9; top: 250px; left: 320px;}
+        .carta6 { --angle: -25deg; --scale: 1.08; top: 350px; left: 600px;}
+        .carta7 { --angle: 16deg; --scale: 1.03; top: 400px; left: 700px;}
+        .carta8 { --angle: 6deg; --scale: 0.97; top: 500px; left: 200px;}
+        .carta9 { --angle: -12deg; --scale: 1.12; top: 100px; left: 700px;}
+        .carta10 { --angle: 30deg; --scale: 0.92; top: 500px; left: 500px;}
+        .carta11 { --angle: -22deg; --scale: 1.05; top: 600px; left: 1000px;}
+        .carta12 { --angle: 18deg; --scale: 1.08; top: 700px; left: 900px;}
+        .carta13 { --angle: 10deg; --scale: 0.95; top: 600px; left: 200px;}
+        .carta14 { --angle: -16deg; --scale: 1.12; top: 700px; left: 400px;}
+        .carta15 { --angle: 24deg; --scale: 1.02; top: 50px; left: 1000px;}
+        .carta16 { --angle: -8deg; --scale: 1.07; top: 400px; left: 1000px;}
+        .carta17 { --angle: 14deg; --scale: 1.1; top: 300px; left: 1100px;}
+        .carta18 { --angle: -30deg; --scale: 1.05; top: 700px; left: 600px;}
+        .carta19 { --angle: 20deg; --scale: 1.09; top: 600px; left: 800px;}
+        .carta20 { --angle: -12deg; --scale: 1.02; top: 50px; left: 900px;}
+        .carta1  { border-color: #f43f5e; background: linear-gradient(135deg, #f43f5e 60%, #fff 100%); }
+        .carta2  { border-color: #fbbf24; background: linear-gradient(135deg, #fbbf24 60%, #fff 100%); }
+        .carta3  { border-color: #6366f1; background: linear-gradient(135deg, #6366f1 60%, #fff 100%); }
+        .carta4  { border-color: #10b981; background: linear-gradient(135deg, #10b981 60%, #fff 100%); }
+        .carta5  { border-color: #f59e42; background: linear-gradient(135deg, #f59e42 60%, #fff 100%); }
+        .carta6  { border-color: #ef4444; background: linear-gradient(135deg, #ef4444 60%, #fff 100%); }
+        .carta7  { border-color: #3b82f6; background: linear-gradient(135deg, #3b82f6 60%, #fff 100%); }
+        .carta8  { border-color: #a21caf; background: linear-gradient(135deg, #a21caf 60%, #fff 100%); }
+        .carta9  { border-color: #fbbf24; background: linear-gradient(135deg, #fbbf24 60%, #fff 100%); }
+        .carta10 { border-color: #6366f1; background: linear-gradient(135deg, #6366f1 60%, #fff 100%); }
+        .carta11 { border-color: #10b981; background: linear-gradient(135deg, #10b981 60%, #fff 100%); }
+        .carta12 { border-color: #f43f5e; background: linear-gradient(135deg, #f43f5e 60%, #fff 100%); }
+        .carta13 { border-color: #fbbf24; background: linear-gradient(135deg, #fbbf24 60%, #fff 100%); }
+        .carta14 { border-color: #6366f1; background: linear-gradient(135deg, #6366f1 60%, #fff 100%); }
+        .carta15 { border-color: #10b981; background: linear-gradient(135deg, #10b981 60%, #fff 100%); }
+        .carta16 { border-color: #f59e42; background: linear-gradient(135deg, #f59e42 60%, #fff 100%); }
+        .carta17 { border-color: #ef4444; background: linear-gradient(135deg, #ef4444 60%, #fff 100%); }
+        .carta18 { border-color: #3b82f6; background: linear-gradient(135deg, #3b82f6 60%, #fff 100%); }
+        .carta19 { border-color: #a21caf; background: linear-gradient(135deg, #a21caf 60%, #fff 100%); }
+        .carta20 { border-color: #fbbf24; background: linear-gradient(135deg, #fbbf24 60%, #fff 100%); }
+        
+        .modal-bg {
+            position: fixed;
+            z-index: 2000;
+            left: 0; top: 0; width: 100vw; height: 100vh;
+            background: rgba(0,0,0,0.45);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeInModal 0.2s;
+        }
+        .modal {
+            background: #fff;
+            color: #1e293b;
+            border-radius: 18px;
+            padding: 32px 24px 20px 24px;
+            min-width: 260px;
+            max-width: 90vw;
+            box-shadow: 0 8px 40px 0 #1e293b33;
+            font-family: inherit;
+            font-size: 1.08em;
+            position: relative;
+            text-align: left;
+            animation: fadeInModal 0.25s;
+        }
+        .modal-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #f43f5e;
+            letter-spacing: 1px;
+        }
+        .modal-close {
+            position: absolute;
+            top: 10px; right: 16px;
+            background: none;
+            border: none;
+            font-size: 1.3em;
+            color: #f43f5e;
+            cursor: pointer;
+            font-weight: bold;
+            transition: color 0.2s;
+        }
+        .modal-close:hover { color: #1e293b; }
+        @keyframes fadeInModal {
+            from { opacity: 0; transform: scale(0.95);}
+            to   { opacity: 1; transform: scale(1);}
+        }
+        .menu-btn.play-anim {
+            animation: playBtnZoomOut 0.7s cubic-bezier(.68,-0.55,.27,1.55) forwards;
+            z-index: 2001;
+        }
+        @keyframes playBtnZoomOut {
+            0% {
+                transform: scale(1) rotate(0deg);
+                opacity: 1;
+                filter: none;
+            }
+            60% {
+                transform: scale(1.2) rotate(-8deg);
+                opacity: 1;
+                filter: brightness(1.2);
+            }
+            100% {
+                transform: scale(30) rotate(-8deg);
+                opacity: 0;
+                filter: brightness(1.5) blur(8px);
+            }
+        }
+        .fadeout-menu {
+            animation: fadeOutMenu 0.7s cubic-bezier(.68,-0.55,.27,1.55) forwards;
+        }
+        @keyframes fadeOutMenu {
+            to {
+                opacity: 0;
+                filter: blur(12px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-container" id="menu-container">
+        <div class="cards-bg">
+            <div class="carta carta1" data-symbol="🂠"></div>
+            <div class="carta carta2" data-symbol="🃏"></div>
+            <div class="carta carta3" data-symbol="🂡"></div>
+            <div class="carta carta4" data-symbol="🂱"></div>
+            <div class="carta carta5" data-symbol="🂾"></div>
+            <div class="carta carta6" data-symbol="🃁"></div>
+            <div class="carta carta7" data-symbol="🃑"></div>
+            <div class="carta carta8" data-symbol="🃝"></div>
+            <div class="carta carta9" data-symbol="🃍"></div>
+            <div class="carta carta10" data-symbol="🃓"></div>
+            <div class="carta carta11" data-symbol="🎴"></div>
+            <div class="carta carta12" data-symbol="🀄"></div>
+            <div class="carta carta13" data-symbol="🃏"></div>
+            <div class="carta carta14" data-symbol="🂡"></div>
+            <div class="carta carta15" data-symbol="🂾"></div>
+            <div class="carta carta16" data-symbol="🃁"></div>
+            <div class="carta carta17" data-symbol="🃑"></div>
+            <div class="carta carta18" data-symbol="🃝"></div>
+            <div class="carta carta19" data-symbol="🃍"></div>
+            <div class="carta carta20" data-symbol="🃓"></div>
+        </div>
+        <div class="main-title">Jogo da Memória</div>
+        <a href="game.html" id="play-link">
+            <button class="menu-btn" id="play-btn">Jogar</button>
+        </a>
+        <div class="menu-links">
+            <a href="#" class="menu-link" id="como-jogar-link">Como Jogar</a>
+            <a href="#" class="menu-link" id="sobre-link">Sobre</a>
+        </div>
+    </div>
+    <div id="modal-root"></div>
+    <script>
+        // Modal logic
+        function showModal(title, content) {
+            const modalBg = document.createElement('div');
+            modalBg.className = 'modal-bg';
+            modalBg.innerHTML = `
+                <div class="modal">
+                    <button class="modal-close" title="Fechar" onclick="this.closest('.modal-bg').remove()">×</button>
+                    <div class="modal-title">${title}</div>
+                    <div>${content}</div>
+                </div>
+            `;
+            modalBg.onclick = function(e) {
+                if (e.target === modalBg) modalBg.remove();
+            };
+            document.getElementById('modal-root').appendChild(modalBg);
+        }
+
+        document.getElementById('como-jogar-link').onclick = function(e) {
+            e.preventDefault();
+            showModal(
+                'Como Jogar',
+                `<ul style="padding-left:18px; margin:0;">
+                    <li>O objetivo é encontrar todos os pares de cartas iguais.</li>
+                    <li>Clique em duas cartas para virá-las.</li>
+                    <li>Se forem iguais, permanecem viradas.</li>
+                    <li>Se forem diferentes, elas voltam a ficar ocultas.</li>
+                    <li>O jogo termina quando todos os pares forem encontrados.</li>
+                </ul>`
+            );
+        };
+        document.getElementById('sobre-link').onclick = function(e) {
+            e.preventDefault();
+            showModal(
+                'Sobre',
+                `<div>Jogo desenvolvido por:<br><b>Carlos Silva</b> e <b>Rodrigo Tomásio</b></div>`
+            );
+        };
+
+        // Play button animation and redirect
+        document.getElementById('play-link').addEventListener('click', function(e) {
+            e.preventDefault();
+            const btn = document.getElementById('play-btn');
+            const menu = document.getElementById('menu-container');
+            btn.classList.add('play-anim');
+            menu.classList.add('fadeout-menu');
+            setTimeout(() => {
+                window.location.href = this.href;
+            }, 700);
+        });
+    </script>
+</body>
+</html>
